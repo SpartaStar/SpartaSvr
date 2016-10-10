@@ -1,0 +1,2 @@
+# SpartaSvr
+server
