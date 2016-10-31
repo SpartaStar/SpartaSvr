@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
+//"time"
 )
 
 var Ormer1 orm.Ormer
@@ -13,16 +14,35 @@ func init() {
 	orm.RegisterModel(new(test))
 }
 
+//type t_gzh struct{
+//	Uin string	
+//	Wechat_id string		
+//	Wechat_name string	
+//	Introduce string		
+//	Renzhen string		
+//	Qrcode_img_url string
+//	Author_img_url string
+////	Category      string
+////	Author_link   string
+//	Update_time   time.Time
+//}
+
 func GetSstList() Sst {
 	//操作数据库获取公众号信息
 	//TODO
 	Ormer1 = orm.NewOrm()
 	var sst Sst
-	
-	var sstinfos [] SstInfo
-	Ormer1.QueryTable("t_gzh").Limit(20).All(&sstinfos, "wechat_id", "wechat_name", "author_img_url")
-	sst.Sst_list = append(sst.Sst_list, sstinfos...)
-	return sst //
+
+	var ssts [] t_gzh
+	//Ormer1.QueryTable("t_gzh").Limit(1).All(&sstinfos, "wechat_id", "wechat_name", "author_img_url")
+	res,_ := Ormer1.Raw("select wechat_id, wechat_name, author_img_url from t_gzh").QueryRows(&ssts)
+	fmt.Println(res)
+	fmt.Println(ssts)
+	//TODO :db tables to json
+	sst.Sst_list = append(sst.Sst_list, ssts...)
+
+
+	return sst
 }
 
 /****************** test *****************************/
@@ -54,6 +74,7 @@ func Dbopr() { //test orm
 //	}
 
 	var tes []test
+
 	Ormer1.QueryTable("test").Limit(5).All(&tes,"name", "id")
 	fmt.Println(tes)
 }
