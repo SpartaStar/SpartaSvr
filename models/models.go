@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
-//"time"
+	//"time"
 )
 
 var Ormer1 orm.Ormer
@@ -14,33 +14,15 @@ func init() {
 	orm.RegisterModel(new(test))
 }
 
-//type t_gzh struct{
-//	Uin string	
-//	Wechat_id string		
-//	Wechat_name string	
-//	Introduce string		
-//	Renzhen string		
-//	Qrcode_img_url string
-//	Author_img_url string
-////	Category      string
-////	Author_link   string
-//	Update_time   time.Time
-//}
-
 func GetSstList() Sst {
 	//操作数据库获取公众号信息
-	//TODO
 	Ormer1 = orm.NewOrm()
 	var sst Sst
 
 	var ssts [] t_gzh
 	//Ormer1.QueryTable("t_gzh").Limit(1).All(&sstinfos, "wechat_id", "wechat_name", "author_img_url")
-	res,_ := Ormer1.Raw("select wechat_id, wechat_name, author_img_url from t_gzh").QueryRows(&ssts)
-	fmt.Println(res)
-	fmt.Println(ssts)
-	//TODO :db tables to json
+	Ormer1.Raw("select wechat_id, wechat_name, author_img_url from t_gzh limit 10").QueryRows(&ssts)
 	sst.Sst_list = append(sst.Sst_list, ssts...)
-
 
 	return sst
 }
