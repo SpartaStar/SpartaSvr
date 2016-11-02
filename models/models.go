@@ -14,17 +14,30 @@ func init() {
 	orm.RegisterModel(new(test))
 }
 
-func GetSstList() Sst {
+func GetSstList() (sst SstList){
 	//操作数据库获取公众号信息
 	Ormer1 = orm.NewOrm()
-	var sst Sst
 
-	var ssts [] t_gzh
+	var ssts [] SstInfo
 	//Ormer1.QueryTable("t_gzh").Limit(1).All(&sstinfos, "wechat_id", "wechat_name", "author_img_url")
 	Ormer1.Raw("select wechat_id, wechat_name, author_img_url from t_gzh limit 10").QueryRows(&ssts)
 	sst.Sst_list = append(sst.Sst_list, ssts...)
 
 	return sst
+}
+
+func GetArticleList() (atl ArticleList){
+	Ormer1 = orm.NewOrm()
+	//TODO : parse the upload json
+	
+	var atsBuf [] ArticleInfo
+	Ormer1.Raw("select  from t_article").QueryRows(&atsBuf)	//TODO : sql
+
+	//TODO :atsBuf is a buffer,根据客户端上传的文章数量和文章索引来获取buffer中相应的数据
+	var ats [] ArticleInfo
+	atl.Article_list = append(atl.Article_list, ats...)
+
+	return atl
 }
 
 /****************** test *****************************/
